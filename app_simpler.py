@@ -16,9 +16,9 @@ st.header("Find Fellows based on their skills and background")
 # SIDEBAR
 st.sidebar.header("About")
 st.sidebar.info(
-    "There are a lot of Zinc Fellows in the database and ain't nobody's got time to read it all."
-    "To save time, ask questions about their skills, background, or interests, and get AI-powered responses."
-    " ***Fellows database last updated on 14 June***"
+    "So many amazing people in the Zinc Fellows list, so little time to look through them! "
+    "Ask questions about their skills, background, or interests, and get AI-powered responses. "
+    "***Fellows database last updated on 14 June***"
 )
 
 threshold = st.sidebar.slider(
