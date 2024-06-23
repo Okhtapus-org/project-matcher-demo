@@ -6,6 +6,4 @@ numpy
 openai
 python-dotenv
 toml
-hmac
-pickle
 time

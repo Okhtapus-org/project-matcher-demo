@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 from rag_setup import retrieve_relevant_entries
 from openai_integration import process_query
+import pickle 
 import hmac
-import pickle
 
 # *** PASSWORD CHECK ***
 def check_password():
