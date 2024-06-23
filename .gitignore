@@ -6,3 +6,6 @@
 
 # Ignore secrets file
 .streamlit/secrets.toml
+
+# Ignore fellows file
+vb8_fellows.csv

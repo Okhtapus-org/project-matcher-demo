@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
-from rag_setup import initialize_rag, retrieve_relevant_entries
+from rag_setup import retrieve_relevant_entries
 from openai_integration import process_query
 import hmac
+import pickle
 
 # *** PASSWORD CHECK ***
 def check_password():
@@ -34,12 +35,18 @@ if not check_password():
 
 # *** MAIN APP STARTS HERE ***
 
-# Initialize RAG system
+# Load pre-initialized RAG objects
 @st.cache_resource
-def init_rag():
-    return initialize_rag()
+def load_rag():
+    with open('rag_df.pkl', 'rb') as f:
+        df = pickle.load(f)
+    with open('rag_index.pkl', 'rb') as f:
+        index = pickle.load(f)
+    with open('rag_model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    return df, index, model
 
-df, index, model = init_rag()
+df, index, model = load_rag()
 
 st.title("Zinc Fellows Finder")
 st.header("Find Fellows based on their skills and background")
@@ -56,7 +63,7 @@ threshold = st.sidebar.slider(
     "Relevance Threshold", 
     min_value=0.0, 
     max_value=1.0, 
-    value=0.6,  # default value
+    value=0.3,  # default value
     step=0.05,
     help="Adjust this to control how closely fellows need to match your query. Higher values mean stricter matching."
 )
@@ -66,7 +73,7 @@ st.sidebar.info(
 )
 
 # MAIN BIT
-question_input = st.text_input(label="Ask your question", placeholder="Ask any question about the Fellows database", label_visibility="hidden")
+question_input = st.text_input(label="Ask your question", placeholder="Ask any question about the Fellows database. E.g. 'Who would know about how to sell to the NHS?'", label_visibility="hidden")
 
 # Button to send question
 if st.button("Ask question"):

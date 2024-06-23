@@ -37,14 +37,22 @@ def retrieve_relevant_entries(query, df, index, model, top_k=5, threshold=0):
     relevant_entries = df.iloc[filtered_indices[sorted_indices]]
     return relevant_entries, filtered_similarities[sorted_indices]
 
-def initialize_rag():
+def initialize_rag(progress_iter=None):
     file_path = 'vb8_fellows.csv'
     df = load_and_preprocess_data(file_path)
+    if progress_iter:
+        next(progress_iter)
+    
     embeddings, model = create_embeddings(df)
+    if progress_iter:
+        next(progress_iter)
+    
     index = setup_vector_store(embeddings)
+    if progress_iter:
+        next(progress_iter)
+    
     return df, index, model
 
-# Remove or comment out the following lines:
 # test_query = "Find fellows interested in children's health"
 # relevant_entries = retrieve_relevant_entries(test_query, df, index, model)
 # print(relevant_entries)
