@@ -5,4 +5,4 @@
 .env
 
 # Ignore secrets file
-steamlit/secrets.toml
+streamlit/secrets.toml
