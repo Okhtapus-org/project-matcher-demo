@@ -5,6 +5,7 @@ from openai_integration import process_query
 import pickle
 import hmac
 import os
+from utils import create_accordion_html
 
 # *** PASSWORD CHECK ***
 def check_password():
@@ -44,7 +45,7 @@ def init_rag():
 df, embeddings, model = init_rag()
 
 st.title("Zinc Fellows Finder")
-st.header("Find Fellows based on their skills and background")
+st.subheader("Find Fellows based on their skills and background")
 
 # SIDEBAR
 st.sidebar.header("About")
@@ -86,21 +87,10 @@ if st.button("Ask question"):
                     st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; font-size: 18px;'>{response}</div>", unsafe_allow_html=True)
                     
                     # Display relevant fellows
-                    st.subheader("Relevant Fellows:")
-                    for _, fellow in relevant_entries.iterrows():
-                        st.write(f"**{fellow['Name']}** - {fellow['Role Title']}")
-                        with st.expander("See more"):
-                            fields_to_display = [
-                                ("Bio", "Bio"),
-                                ("Wants to engage by", "Wants to engage by"),
-                                ("VB Priority area(s)", "VB Priority area(s)"),
-                                ("Sector/Type", "Sector/ Type"),
-                                ("Spike", "Spike")
-                            ]
-                            
-                            for display_name, field_name in fields_to_display:
-                                if pd.notna(fellow[field_name]) and fellow[field_name] != "" and fellow[field_name].lower() not in ["n/a", "none"]:
-                                    st.write(f"**{display_name}:** {fellow[field_name]}")
+                    st.divider()
+                    st.caption("Relevant Fellows:")
+                    accordion_html = create_accordion_html(relevant_entries)
+                    st.components.v1.html(accordion_html, height=400, scrolling=True)
                 else:
                     st.warning("No closely matching fellows found. Try lowering the relevance threshold or rephrasing your question.")
             
