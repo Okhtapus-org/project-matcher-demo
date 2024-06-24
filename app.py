@@ -80,8 +80,10 @@ if st.button("Ask question"):
                 relevant_entries = retrieve_relevant_entries(question_input, df, embeddings, model)
                 
                 if len(relevant_entries) > 0:
-                    # Process query with OpenAI
+                    # Process query and show OpenAI response
                     response = process_query(question_input, relevant_entries)
+                    st.success("Here's what I found:")
+                    st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; font-size: 18px;'>{response}</div>", unsafe_allow_html=True)
                     
                     # Display relevant fellows
                     st.subheader("Relevant Fellows:")
