@@ -1,9 +1,10 @@
 import streamlit as st
 import pandas as pd
-from rag_setup import retrieve_relevant_entries
+from rag_setup import initialize_rag, retrieve_relevant_entries
 from openai_integration import process_query
-import pickle 
+import pickle
 import hmac
+import os
 
 # *** PASSWORD CHECK ***
 def check_password():
@@ -37,16 +38,10 @@ if not check_password():
 
 # Load pre-initialized RAG objects
 @st.cache_resource
-def load_rag():
-    with open('rag_df.pkl', 'rb') as f:
-        df = pickle.load(f)
-    with open('rag_index.pkl', 'rb') as f:
-        index = pickle.load(f)
-    with open('rag_model.pkl', 'rb') as f:
-        model = pickle.load(f)
-    return df, index, model
+def init_rag():
+    return initialize_rag()
 
-df, index, model = load_rag()
+df, embeddings, model = init_rag()
 
 st.title("Zinc Fellows Finder")
 st.header("Find Fellows based on their skills and background")
@@ -82,7 +77,7 @@ if st.button("Ask question"):
         with st.spinner("Processing your question..."):
             try:
                 # Retrieve relevant entries using the user-defined threshold
-                relevant_entries, similarities = retrieve_relevant_entries(question_input, df, index, model, threshold=threshold)
+                relevant_entries = retrieve_relevant_entries(question_input, df, embeddings, model)
                 
                 if len(relevant_entries) > 0:
                     # Process query with OpenAI
@@ -93,9 +88,9 @@ if st.button("Ask question"):
                     st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; font-size: 18px;'>{response}</div>", unsafe_allow_html=True)
                     
                     # Display relevant fellows
-                    st.subheader(f"Relevant Fellows (Threshold: {threshold:.2f}):")
-                    for (_, fellow), similarity in zip(relevant_entries.iterrows(), similarities):
-                        st.write(f"**{fellow['Name']}** - {fellow['Role Title']} (Relevance: {similarity:.2f})")
+                    st.subheader("Relevant Fellows:")
+                    for _, fellow in relevant_entries.iterrows():
+                        st.write(f"**{fellow['Name']}** - {fellow['Role Title']}")
                         with st.expander("See more"):
                             st.write(f"**Bio:** {fellow['Bio']}")
                             st.write(f"**Wants to engage by:** {fellow['Wants to engage by']}")

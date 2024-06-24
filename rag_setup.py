@@ -1,6 +1,5 @@
 import pandas as pd
 from sentence_transformers import SentenceTransformer
-import faiss
 import numpy as np
 
 def load_and_preprocess_data(file_path):
@@ -13,46 +12,14 @@ def create_embeddings(df):
     embeddings = model.encode(df['combined_text'].tolist())
     return embeddings, model
 
-def setup_vector_store(embeddings):
-    dimension = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dimension)
-    index.add(embeddings.astype('float32'))
-    return index
+def retrieve_relevant_entries(query, df, embeddings, model, top_k=5):
+    query_embedding = model.encode([query])
+    similarities = np.dot(embeddings, query_embedding.T).squeeze()
+    top_indices = similarities.argsort()[-top_k:][::-1]
+    return df.iloc[top_indices]
 
-def retrieve_relevant_entries(query, df, index, model, top_k=5, threshold=0):
-    query_vector = model.encode([query])
-    distances, indices = index.search(query_vector.astype('float32'), top_k)
-    
-    # Convert distances to similarities (assuming cosine distance)
-    similarities = 1 - distances / 2.0
-    
-    # Filter based on threshold
-    mask = similarities[0] >= threshold
-    filtered_indices = indices[0][mask]
-    filtered_similarities = similarities[0][mask]
-    
-    # Sort by similarity (highest first)
-    sorted_indices = filtered_similarities.argsort()[::-1]
-    
-    relevant_entries = df.iloc[filtered_indices[sorted_indices]]
-    return relevant_entries, filtered_similarities[sorted_indices]
-
-def initialize_rag(progress_iter=None):
+def initialize_rag():
     file_path = 'vb8_fellows.csv'
     df = load_and_preprocess_data(file_path)
-    if progress_iter:
-        next(progress_iter)
-    
     embeddings, model = create_embeddings(df)
-    if progress_iter:
-        next(progress_iter)
-    
-    index = setup_vector_store(embeddings)
-    if progress_iter:
-        next(progress_iter)
-    
-    return df, index, model
-
-# test_query = "Find fellows interested in children's health"
-# relevant_entries = retrieve_relevant_entries(test_query, df, index, model)
-# print(relevant_entries)
+    return df, embeddings, model
