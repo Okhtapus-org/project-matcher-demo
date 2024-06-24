@@ -17,13 +17,16 @@ def init_rag():
             df = pickle.load(f)
         with open('rag_embeddings.pkl', 'rb') as f:
             embeddings = pickle.load(f)
-        # Load the model
-        device = torch.device("cpu")
-        model = SentenceTransformer('all-MiniLM-L6-v2', device=device)
+        
+        # Load the model in a device-agnostic way
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = SentenceTransformer('all-MiniLM-L6-v2')
         model.load_state_dict(torch.load('rag_model.pkl', map_location=device))
+        model.to(device)
+        
         return df, embeddings, model
     except FileNotFoundError:
-        st.error("RAG files not found. Please run create_rag_files.py first.")
+        st.error("RAG files not found. Get someone to run create_rag_files.py first.")
         return None, None, None
 
 df, embeddings, model = init_rag()

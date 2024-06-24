@@ -68,7 +68,7 @@ def main():
             pickle.dump(embeddings, f)
         print("Saved rag_embeddings.pkl")
 
-        # Save the model state dict instead of the whole model
+        # Save the model state dict
         torch.save(model.state_dict(), 'rag_model.pkl')
         print("Saved rag_model.pkl")
 
