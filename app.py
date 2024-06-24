@@ -88,7 +88,7 @@ if st.button("Ask question"):
                     
                     # Display relevant fellows
                     st.divider()
-                    st.caption("Relevant Fellows:")
+                    st.caption("Possibly Relevant Fellows:")
                     accordion_html = create_accordion_html(relevant_entries)
                     st.components.v1.html(accordion_html, height=400, scrolling=True)
                 else:
