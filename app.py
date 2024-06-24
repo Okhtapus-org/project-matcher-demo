@@ -55,16 +55,7 @@ st.sidebar.info(
     "***Fellows database last updated on 14 June***"
 )
 
-threshold = st.sidebar.slider(
-    "Relevance Threshold", 
-    min_value=0.0, 
-    max_value=1.0, 
-    value=0.3,  # default value
-    step=0.05,
-    help="Adjust this to control how closely fellows need to match your query. Higher values mean stricter matching."
-)
-
-st.sidebar.info(
+st.sidebar.caption(
     "Do you want something added or changed here? Message Rus"
 )
 
