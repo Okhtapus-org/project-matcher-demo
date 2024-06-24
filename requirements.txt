@@ -1,7 +1,7 @@
 streamlit==1.36.0
 pandas==2.2.2
 sentence-transformers==3.0.1
-faiss-gpu==1.7.4
+faiss-gpu==1.7.2
 numpy==2.0.0
 openai==1.35.3
 python-dotenv==1.0.1
