@@ -3,6 +3,8 @@ from rag_setup import retrieve_relevant_entries
 from openai_integration import process_query
 import pickle
 from utils import create_accordion_html, check_password
+import torch
+from sentence_transformers import SentenceTransformer
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
@@ -13,13 +15,15 @@ def init_rag():
     try:
         with open('rag_df.pkl', 'rb') as f:
             df = pickle.load(f)
-        with open('rag_index.pkl', 'rb') as f:
+        with open('rag_embeddings.pkl', 'rb') as f:
             embeddings = pickle.load(f)
-        with open('rag_model.pkl', 'rb') as f:
-            model = pickle.load(f)
+        # Load the model
+        device = torch.device("cpu")
+        model = SentenceTransformer('all-MiniLM-L6-v2', device=device)
+        model.load_state_dict(torch.load('rag_model.pkl', map_location=device))
         return df, embeddings, model
     except FileNotFoundError:
-        st.error("RAG files not found. Get someone to run create_rag_files.py first.")
+        st.error("RAG files not found. Please run create_rag_files.py first.")
         return None, None, None
 
 df, embeddings, model = init_rag()

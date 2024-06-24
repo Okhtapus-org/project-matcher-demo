@@ -1,10 +1,11 @@
 import pickle
-from rag_setup import initialize_rag
-from tqdm import tqdm
-import time
-import csv
 import os
 import sys
+import csv
+import torch
+from tqdm import tqdm
+import time
+from rag_setup import initialize_rag
 
 # Pseudonimises file, then sets up vector files for RAG. Run this every time you update the DB file
 # Usage: python create_rag_files.py vb8_fellows.csv
@@ -43,7 +44,7 @@ def run_with_progress_bar(total=100):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python script_name.py <input_file>")
+        print("Usage: python create_rag_files.py <input_file>")
         sys.exit(1)
 
     input_file = sys.argv[1]
@@ -55,7 +56,7 @@ def main():
 
         print("Starting RAG initialization...")
         progress = run_with_progress_bar()
-        df, index, model = initialize_rag(output_file)
+        df, embeddings, model = initialize_rag(output_file)
         next(progress)
         print("RAG initialization complete. Saving objects...")
 
@@ -63,12 +64,12 @@ def main():
             pickle.dump(df, f)
         print("Saved rag_df.pkl")
 
-        with open('rag_index.pkl', 'wb') as f:
-            pickle.dump(index, f)
-        print("Saved rag_index.pkl")
+        with open('rag_embeddings.pkl', 'wb') as f:
+            pickle.dump(embeddings, f)
+        print("Saved rag_embeddings.pkl")
 
-        with open('rag_model.pkl', 'wb') as f:
-            pickle.dump(model, f)
+        # Save the model state dict instead of the whole model
+        torch.save(model.state_dict(), 'rag_model.pkl')
         print("Saved rag_model.pkl")
 
         print("RAG objects saved successfully.")
