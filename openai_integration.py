@@ -1,13 +1,13 @@
 import os
-import openai
 import pandas as pd
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# Set up OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize the OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def generate_prompt(query, relevant_entries):
     """
@@ -41,15 +41,15 @@ def query_openai(prompt, model="gpt-3.5-turbo"):
     Send a query to the OpenAI API and return the response.
     """
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model=model,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that provides information about Zinc Fellows."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=300  # Adjust as needed
+            max_tokens=150  # Adjust as needed
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
