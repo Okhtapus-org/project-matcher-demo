@@ -1,3 +1,7 @@
+import pandas as pd
+import streamlit as st
+import hmac
+
 def create_accordion_html(relevant_entries):
     accordion_html = """
     <style>
@@ -38,14 +42,49 @@ def create_accordion_html(relevant_entries):
 
     for i, (_, fellow) in enumerate(relevant_entries.iterrows()):
         accordion_html += f"""
-        <button class="accordion" onclick="toggleAccordion('panel{i}')">{fellow['Name']} - {fellow['Role Title']}</button>
+        <button class="accordion" onclick="toggleAccordion('panel{i}')">
+            {fellow['Name']} - {fellow['Role Title']}
+        </button>
         <div id="panel{i}" class="panel">
-          <p><strong>Bio:</strong> {fellow['Bio']}</p>
-          <p><strong>Wants to engage by:</strong> {fellow['Wants to engage by']}</p>
-          <p><strong>VB Priority area(s):</strong> {fellow['VB Priority area(s)']}</p>
-          <p><strong>Sector/Type:</strong> {fellow['Sector/ Type']}</p>
-          <p><strong>Spike:</strong> {fellow['Spike']}</p>
-        </div>
         """
+        
+        fields_to_display = [
+            ("Bio", "Bio"),
+            ("Wants to engage by", "Wants to engage by"),
+            ("VB Priority area(s)", "VB Priority area(s)"),
+            ("Sector/Type", "Sector/ Type"),
+            ("Spike", "Spike")
+        ]
+        
+        for display_name, field_name in fields_to_display:
+            if pd.notna(fellow[field_name]) and fellow[field_name] != "" and fellow[field_name].lower() not in ["n/a", "none"]:
+                accordion_html += f"<p><strong>{display_name}:</strong> {fellow[field_name]}</p>"
+        
+        accordion_html += "</div>"
 
     return accordion_html
+
+# *** PASSWORD CHECK ***
+def check_password():
+    """Returns `True` if the user had the correct password."""
+
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Don't store the password.
+        else:
+            st.session_state["password_correct"] = False
+
+    # Return True if the password is validated.
+    if st.session_state.get("password_correct", False):
+        return True
+
+    # Show input for password.
+    st.text_input(
+        "Password", type="password", on_change=password_entered, key="password"
+    )
+    if "password_correct" in st.session_state:
+        st.error("😕 Password incorrect")
+    return False
+

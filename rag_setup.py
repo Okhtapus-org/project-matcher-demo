@@ -18,8 +18,7 @@ def retrieve_relevant_entries(query, df, embeddings, model, top_k=5):
     top_indices = similarities.argsort()[-top_k:][::-1]
     return df.iloc[top_indices]
 
-def initialize_rag():
-    file_path = 'vb8_fellows.csv'
+def initialize_rag(file_path):
     df = load_and_preprocess_data(file_path)
     embeddings, model = create_embeddings(df)
     return df, embeddings, model

@@ -1,46 +1,26 @@
 import streamlit as st
-import pandas as pd
-from rag_setup import initialize_rag, retrieve_relevant_entries
+from rag_setup import retrieve_relevant_entries
 from openai_integration import process_query
 import pickle
-import hmac
-import os
-from utils import create_accordion_html
-
-# *** PASSWORD CHECK ***
-def check_password():
-    """Returns `True` if the user had the correct password."""
-
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store the password.
-        else:
-            st.session_state["password_correct"] = False
-
-    # Return True if the password is validated.
-    if st.session_state.get("password_correct", False):
-        return True
-
-    # Show input for password.
-    st.text_input(
-        "Password", type="password", on_change=password_entered, key="password"
-    )
-    if "password_correct" in st.session_state:
-        st.error("😕 Password incorrect")
-    return False
-
+from utils import create_accordion_html, check_password
 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
 
-# *** MAIN APP STARTS HERE ***
-
 # Load pre-initialized RAG objects
 @st.cache_resource
 def init_rag():
-    return initialize_rag()
+    try:
+        with open('rag_df.pkl', 'rb') as f:
+            df = pickle.load(f)
+        with open('rag_index.pkl', 'rb') as f:
+            embeddings = pickle.load(f)
+        with open('rag_model.pkl', 'rb') as f:
+            model = pickle.load(f)
+        return df, embeddings, model
+    except FileNotFoundError:
+        st.error("RAG files not found. Get someone to run create_rag_files.py first.")
+        return None, None, None
 
 df, embeddings, model = init_rag()
 
