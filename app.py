@@ -83,20 +83,22 @@ if st.button("Ask question"):
                     # Process query with OpenAI
                     response = process_query(question_input, relevant_entries)
                     
-                    # Display the AI-generated response
-                    st.success("Here's what I found:")
-                    st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; font-size: 18px;'>{response}</div>", unsafe_allow_html=True)
-                    
                     # Display relevant fellows
                     st.subheader("Relevant Fellows:")
                     for _, fellow in relevant_entries.iterrows():
                         st.write(f"**{fellow['Name']}** - {fellow['Role Title']}")
                         with st.expander("See more"):
-                            st.write(f"**Bio:** {fellow['Bio']}")
-                            st.write(f"**Wants to engage by:** {fellow['Wants to engage by']}")
-                            st.write(f"**VB Priority area(s):** {fellow['VB Priority area(s)']}")
-                            st.write(f"**Sector/Type:** {fellow['Sector/ Type']}")
-                            st.write(f"**Spike:** {fellow['Spike']}")
+                            fields_to_display = [
+                                ("Bio", "Bio"),
+                                ("Wants to engage by", "Wants to engage by"),
+                                ("VB Priority area(s)", "VB Priority area(s)"),
+                                ("Sector/Type", "Sector/ Type"),
+                                ("Spike", "Spike")
+                            ]
+                            
+                            for display_name, field_name in fields_to_display:
+                                if pd.notna(fellow[field_name]) and fellow[field_name] != "" and fellow[field_name].lower() not in ["n/a", "none"]:
+                                    st.write(f"**{display_name}:** {fellow[field_name]}")
                 else:
                     st.warning("No closely matching fellows found. Try lowering the relevance threshold or rephrasing your question.")
             
