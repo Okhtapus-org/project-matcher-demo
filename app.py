@@ -46,6 +46,22 @@ st.sidebar.caption(
     "Do you want something added or changed here? Message Rus"
 )
 
+with st.expander("A note on privacy"):
+    st.write('''
+        General data bit
+        As you've seen, the page is password protected.
+        You're querying the contents of a publicly available (but not publicly shared) Airtable database owned by Zinc. 
+        The emails and LinkedIn URLs have been removed. Names have been partially anonimised by only
+        keeping the first letter of the surname.
+
+        "AI" bit
+        The relevant profile finding happens locally (i.e. privately) and only the contents of the relevant
+        profiles are seen by a remote LLM.
+        The actual answer comes from Open AI's GPT-3.5-turbo. Only what is visible to you as the user of this app is 
+        sent to OpenAI, this *should* all be public info. 
+        OpenAI have been asked not to train their models on the inputs.
+    ''')
+
 # MAIN BIT
 question_input = st.text_input(label="Ask your question", placeholder="Ask any question about the Fellows database. E.g. 'Who would know about how to sell to the NHS?'", label_visibility="hidden")
 
