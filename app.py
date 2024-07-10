@@ -39,11 +39,12 @@ st.sidebar.header("About")
 st.sidebar.info(
     "So many amazing people in the Zinc Fellows list, so little time to look through them! "
     "Ask questions about their skills, background, or interests, and get AI-powered responses. "
-    "***Fellows database last updated on 14 June***"
 )
 
 st.sidebar.caption(
     "Do you want something added or changed here? Message Rus"
+    "  \nFellows database last updated on 14 June"
+    "  \nDB link: https://airtable.com/appDtdgZ1tvVW7rhv/shrmBQwT87j1xH3Nh/tbleA8k4UFnl16Tsk"
 )
 
 with st.sidebar.expander("A note on privacy"):
@@ -57,7 +58,7 @@ with st.sidebar.expander("A note on privacy"):
 
         "AI" bit
              
-        The relevant profile finding happens locally (i.e. privately) and only the contents of the relevant
+        The relevant profile finding happens locally (i.e. privately) and only the partially anonimised contents of the relevant
         profiles are seen by a remote LLM.
         The actual answer comes from Open AI's GPT-3.5-turbo. Only what is visible to you as the user of this app is 
         sent to OpenAI, this *should* all be public info. 
