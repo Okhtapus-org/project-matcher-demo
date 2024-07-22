@@ -60,7 +60,7 @@ with st.sidebar.expander("A note on privacy"):
              
         The relevant profile finding happens locally (i.e. privately) and only the partially anonimised contents of the relevant
         profiles are seen by a remote LLM.
-        The actual answer comes from Open AI's GPT-3.5-turbo. Only what is visible to you as the user of this app is 
+        The actual answer comes from Open AI's gpt-4o-mini. Only what is visible to you as the user of this app is 
         sent to OpenAI, this *should* all be public info. 
         OpenAI have been asked not to train their models on the inputs.
     ''')

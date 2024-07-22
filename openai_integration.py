@@ -36,7 +36,7 @@ def generate_prompt(query, relevant_entries):
     
     return prompt
 
-def query_openai(prompt, model="gpt-3.5-turbo"):
+def query_openai(prompt, model="gpt-4o-mini"):
     """
     Send a query to the OpenAI API and return the response.
     """
