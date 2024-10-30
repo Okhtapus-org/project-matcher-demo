@@ -43,7 +43,7 @@ st.sidebar.info(
 
 st.sidebar.caption(
     "Do you want something added or changed here? Message Rus"
-    "  \nFellows database last updated on 14 June"
+    "  \nFellows database last updated on 30 Oct 2024"
     "  \nDB link: https://airtable.com/appDtdgZ1tvVW7rhv/shrmBQwT87j1xH3Nh/tbleA8k4UFnl16Tsk"
 )
 
