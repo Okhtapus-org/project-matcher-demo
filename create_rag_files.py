@@ -14,7 +14,7 @@ def anonymize_csv(input_file, output_file):
     with open(input_file, 'r', newline='') as infile, open(output_file, 'w', newline='') as outfile:
         reader = csv.DictReader(infile)
         
-        fieldnames = [field for field in reader.fieldnames if field not in ['LinkedIn/Website', 'Email']]
+        fieldnames = [field for field in reader.fieldnames if field not in ['Website', 'Email Address']]
         
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -25,8 +25,8 @@ def anonymize_csv(input_file, output_file):
             print("Warning: No 'Name' column found. Proceeding without name anonymization.")
         
         for row in reader:
-            row.pop('LinkedIn/Website', None)
-            row.pop('Email', None)
+            row.pop('Website', None)
+            row.pop('Email Address', None)
             
             if name_column:
                 name_parts = row[name_column].split()
@@ -60,17 +60,17 @@ def main():
         next(progress)
         print("RAG initialization complete. Saving objects...")
 
-        with open('rag_df.pkl', 'wb') as f:
+        with open('rag_df_1.pkl', 'wb') as f:
             pickle.dump(df, f)
-        print("Saved rag_df.pkl")
+        print("Saved rag_df_1.pkl")
 
-        with open('rag_embeddings.pkl', 'wb') as f:
+        with open('rag_embeddings_1.pkl', 'wb') as f:
             pickle.dump(embeddings, f)
-        print("Saved rag_embeddings.pkl")
+        print("Saved rag_embeddings_1.pkl")
 
         # Save the model state dict
-        torch.save(model.state_dict(), 'rag_model.pkl')
-        print("Saved rag_model.pkl")
+        torch.save(model.state_dict(), 'rag_model_1.pkl')
+        print("Saved rag_model_1.pkl")
 
         print("RAG objects saved successfully.")
         print("Initialization and saving process completed successfully!")

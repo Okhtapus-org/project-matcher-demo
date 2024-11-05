@@ -9,3 +9,14 @@
 
 # Ignore csv files
 *.csv
+
+
+# csvs
+Enabler Intake Data List-Grid view_anonymized.csv
+Enabler Intake Data List-Grid view.csv
+
+# Ignore pkl files
+rag_df.pkl
+rag_embeddings.pkl
+rag_index.pkl
+rag_model.pkl
