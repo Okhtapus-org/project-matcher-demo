@@ -117,7 +117,7 @@ st.sidebar.info(
 )
 
 # Main input section
-question_input = st.text_input(label="Ask your question", placeholder="Ask any question about the Fellows database...", label_visibility="hidden")
+question_input = st.text_input(label="Ask your question", placeholder="Ask any question about the Projects Okhtapus supports...", label_visibility="hidden")
 
 if st.button("Ask question"):
     if len(question_input.split()) >= 3:
