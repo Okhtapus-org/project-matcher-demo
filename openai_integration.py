@@ -15,6 +15,7 @@ def generate_prompt(query, relevant_entries):
     Generate a prompt for the OpenAI API based on the query and relevant entries.
     """
     prompt = f"""You are an AI assistant helping to find information about Ocean Projects based on their region and project goals. 
+    prompt = f"""You are an AI assistant helping to find information about Ocean Projects based on their region and project goals. 
     Use the following information to answer the query: "{query}"
 
     Relevant Fellow Information:

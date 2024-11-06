@@ -136,10 +136,8 @@ question_input = st.text_input(
     label_visibility="hidden",
 )
 
-# Button to send question
 if st.button("Ask question"):
-    question_words = question_input.split()
-    if len(question_words) >= 3:
+    if len(question_input.split()) >= 3:
         with st.spinner("Processing your question..."):
             try:
                 # Retrieve relevant entries using the user-defined threshold
