@@ -22,14 +22,13 @@ def generate_prompt(query, relevant_entries):
 
     for _, entry in relevant_entries.iterrows():
         prompt += f"""
-        Enabler Organization Name: {entry['Enabler Organization Name']}
-        Role: {entry['Applicant Role/ Position']}
+        Enabler Name: {entry['Enabler Name']}
+        Time Period/Date of Completion: {entry['Time Period/Date of Completion']}
         Summary: {entry['Summary']}
         Regions: {entry['Regions']}
-        Project Summary: {entry['summary of Project/Site?']}
-        Organization type: {entry['Organization type']}
+        Sector(s): {entry['Sector(s)']}
         10 Ocean Decade Challenges: {entry['10 Ocean Decade Challenges']}
-        Project/Site?: {entry['Project/Site?']}
+        Project: {entry['Project']}
         
         """
 

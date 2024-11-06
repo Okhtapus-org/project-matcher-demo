@@ -4,11 +4,10 @@ import numpy as np
 import torch
 
 
-
 def load_and_preprocess_data(file_path):
     df = pd.read_csv(file_path)
     df["combined_text"] = df.apply(
-        lambda row: f"{row['Enabler Organization Name']} {row['Applicant Role/ Position']} {row['Summary']} {row['Regions']} {row['summary of Project/Site?']} {row['Organization type']} {row['10 Ocean Decade Challenges']} {row['Project/Site?']}",
+        lambda row: f"{row['Enabler Name']} {row['Time Period/Date of Completion']} {row['Summary']} {row['Regions']} {row['Sector(s)']} {row['10 Ocean Decade Challenges']} {row['Project']}",
         axis=1,
     )
     return df

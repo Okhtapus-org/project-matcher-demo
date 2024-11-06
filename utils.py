@@ -44,16 +44,16 @@ def create_accordion_html(relevant_entries):
     for i, (_, fellow) in enumerate(relevant_entries.iterrows()):
         accordion_html += f"""
         <button class="accordion" onclick="toggleAccordion('panel{i}')">
-            {fellow['Enabler Organization Name']} - {fellow['Project/Site?']}
+            {fellow['Enabler Name']} - {fellow['Project']}
         </button>
         <div id="panel{i}" class="panel">
         """
 
         fields_to_display = [
-            ("Applicant Role/ Position", "Applicant Role/ Position"),
+            ("Time Period/Date of Completion", "Time Period/Date of Completion"),
             ("Org Summary", "Summary"),
             ("Regions", "Regions"),
-            ("Project/Site summary", "summary of Project/Site?"),
+            ("Project", "Project"),
             # ("Contact", "Email Address")
         ]
 
