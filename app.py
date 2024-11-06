@@ -6,50 +6,55 @@ from utils import create_accordion_html, check_password
 import torch
 from sentence_transformers import SentenceTransformer
 
+
 # Initialize RAG resources
 @st.cache_resource
 def init_rag():
     try:
-        with open('rag_df_1.pkl', 'rb') as f:
+        with open("rag_df_1.pkl", "rb") as f:
             df = pickle.load(f)
-        with open('rag_embeddings_1.pkl', 'rb') as f:
+        with open("rag_embeddings_1.pkl", "rb") as f:
             embeddings = pickle.load(f)
-        
+
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = SentenceTransformer('all-MiniLM-L6-v2')
-        model.load_state_dict(torch.load('rag_model_1.pkl', map_location=device))
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+        model.load_state_dict(torch.load("rag_model_1.pkl", map_location=device))
         model.to(device)
-        
+
         return df, embeddings, model
     except FileNotFoundError:
         st.error("RAG files not found. Get someone to run create_rag_files.py first.")
         return None, None, None
 
+
 df, embeddings, model = init_rag()
+
 
 # Load pre-initialized RAG objects
 @st.cache_resource
 def init_rag():
     try:
-        with open('rag_df_1.pkl', 'rb') as f:
+        with open("rag_df_1.pkl", "rb") as f:
             df = pickle.load(f)
-        with open('rag_embeddings_1.pkl', 'rb') as f:
+        with open("rag_embeddings_1.pkl", "rb") as f:
             embeddings = pickle.load(f)
-        
+
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = SentenceTransformer('all-MiniLM-L6-v2')
-        model.load_state_dict(torch.load('rag_model_1.pkl', map_location=device))
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+        model.load_state_dict(torch.load("rag_model_1.pkl", map_location=device))
         model.to(device)
-        
+
         return df, embeddings, model
     except FileNotFoundError:
         st.error("RAG files not found. Get someone to run create_rag_files.py first.")
         return None, None, None
 
+
 df, embeddings, model = init_rag()
 
 # Set up custom CSS for white background, black text, and Quicksand font
-st.markdown("""
+st.markdown(
+    """
     <style>
         /* Set main background color */
         .stApp {
@@ -99,7 +104,9 @@ st.markdown("""
         /* Add a link to the Google Fonts stylesheet for Quicksand */
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
     </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # Add the logo and title
 st.image("logo-white.png", width=100)
@@ -117,21 +124,29 @@ st.sidebar.info(
 )
 
 # Main input section
-question_input = st.text_input(label="Ask your question", placeholder="Ask any question about the Projects Okhtapus supports...", label_visibility="hidden")
+question_input = st.text_input(
+    label="Ask your question",
+    placeholder="Ask any question about the Projects Okhtapus supports...",
+    label_visibility="hidden",
+)
 
 if st.button("Ask question"):
     if len(question_input.split()) >= 3:
         with st.spinner("Processing your question..."):
             try:
-                relevant_entries = retrieve_relevant_entries(question_input, df, embeddings, model)
+                relevant_entries = retrieve_relevant_entries(
+                    question_input, df, embeddings, model
+                )
                 if relevant_entries:
-                    response = process_query(question_input, relevant_entries)
-                    st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>{response}</div>", unsafe_allow_html=True)
+                    # response = process_query(question_input, relevant_entries)
+                    # st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>{response}</div>", unsafe_allow_html=True)
                     st.caption("Possibly Relevant Projects:")
                     accordion_html = create_accordion_html(relevant_entries)
                     st.components.v1.html(accordion_html, height=400, scrolling=True)
                 else:
-                    st.warning("No closely matching projects found. Try rephrasing your question.")
+                    st.warning(
+                        "No closely matching projects found. Try rephrasing your question."
+                    )
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
     else:
