@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import hmac
 
+
 def create_accordion_html(relevant_entries):
     accordion_html = """
     <style>
@@ -43,26 +44,33 @@ def create_accordion_html(relevant_entries):
     for i, (_, fellow) in enumerate(relevant_entries.iterrows()):
         accordion_html += f"""
         <button class="accordion" onclick="toggleAccordion('panel{i}')">
-            {fellow['Name']} - {fellow['Role Title']}
+            {fellow['Enabler Organization Name']} - {fellow['Project/Site?']}
         </button>
         <div id="panel{i}" class="panel">
         """
-        
+
         fields_to_display = [
-            ("Bio", "Bio"),
-            ("Wants to engage by", "Wants to engage by"),
-            ("VB Priority area(s)", "VB Priority area(s)"),
-            ("Sector/Type", "Sector/ Type"),
-            ("Spike", "Spike")
+            ("Applicant Role/ Position", "Applicant Role/ Position"),
+            ("Org Summary", "Summary"),
+            ("Regions", "Regions"),
+            ("Project/Site summary", "summary of Project/Site?"),
+            # ("Contact", "Email Address")
         ]
-        
+
         for display_name, field_name in fields_to_display:
-            if pd.notna(fellow[field_name]) and fellow[field_name] != "" and fellow[field_name].lower() not in ["n/a", "none"]:
-                accordion_html += f"<p><strong>{display_name}:</strong> {fellow[field_name]}</p>"
-        
+            if (
+                pd.notna(fellow[field_name])
+                and fellow[field_name] != ""
+                and fellow[field_name].lower() not in ["n/a", "none"]
+            ):
+                accordion_html += (
+                    f"<p><strong>{display_name}:</strong> {fellow[field_name]}</p>"
+                )
+
         accordion_html += "</div>"
 
     return accordion_html
+
 
 # *** PASSWORD CHECK ***
 def check_password():
