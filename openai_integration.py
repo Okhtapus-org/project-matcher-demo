@@ -15,7 +15,6 @@ def generate_prompt(query, relevant_entries):
     Generate a prompt for the OpenAI API based on the query and relevant entries.
     """
     prompt = f"""You are an AI assistant helping to find information about Ocean Projects based on their region and project goals. 
-    prompt = f"""You are an AI assistant helping to find information about Ocean Projects based on their region and project goals. 
     Use the following information to answer the query: "{query}"
 
     Relevant Fellow Information:
@@ -75,14 +74,14 @@ if __name__ == "__main__":
     # This is just a mock-up for testing. In the real app, you'll get this from rag_setup.py
     mock_entries = pd.DataFrame(
         {
-            "Enabler Organization Name": ["Enabler Organization Name"],
-            "Role": ["Applicant Role/ Position"],
-            "Summary": ["Summary"],
-            "Regions": ["Regions"],
-            "Project Summary": ["summary of Project/Site?"],
-            "Organization type": ["Organization type"],
-            "10 Ocean Decade Challenges": ["10 Ocean Decade Challenges"],
-            "Project/Site?": ["Project/Site?"],
+            "Name": ["John Doe"],
+            "Role Title": ["Tech Entrepreneur"],
+            "Bio": ["Experienced in AI and machine learning"],
+            "Wants to engage by": ["Mentoring"],
+            "VB Priority area(s)": ["Technology"],
+            "Sector/ Type": ["Tech"],
+            "Spike": ["AI"],
+            "Hoping to gain by getting involved with Zinc": ["Networking"],
         }
     )
 
